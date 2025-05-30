@@ -27,19 +27,11 @@ class HomeScreen extends StatelessWidget {
         future: webtoons,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView.separated(
-              scrollDirection: Axis.vertical,
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                print(index);
-                var webtoon = snapshot.data![index];
-                return Text(webtoon.title);
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 10,
-                );
-              },
+            return Column(
+              children: [
+                SizedBox(height: 100),
+                Expanded(child: makeList(snapshot)),
+              ],
             );
           } else {
             return const Center(
@@ -49,5 +41,54 @@ class HomeScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
+    return ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: snapshot.data!.length,
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            itemBuilder: (context, index) {
+              print(index);
+              var webtoon = snapshot.data![index];
+              return Column(
+                children: [
+                  Container(
+                    width: 250,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 15,
+                          offset: Offset(5, 5),
+                        ),
+                      ],
+                    ),
+                    child: Image.network(webtoon.thumb,
+                    headers: const {
+                      'Referer': 'https://comic.naver.com',
+                      'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    webtoon.title,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(
+                height: 10,
+              );
+            },
+          );
   }
 }
