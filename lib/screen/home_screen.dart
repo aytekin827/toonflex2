@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/webtoon_model.dart';
 import '../services/service.dart';
+import '../widget/widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -50,43 +51,11 @@ class HomeScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             itemBuilder: (context, index) {
               print(index);
-              var webtoon = snapshot.data![index];
-              return Column(
-                children: [
-                  Container(
-                    width: 250,
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 15,
-                          offset: Offset(5, 5),
-                        ),
-                      ],
-                    ),
-                    child: Image.network(webtoon.thumb,
-                    headers: const {
-                      'Referer': 'https://comic.naver.com',
-                      'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    webtoon.title,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              );
+              return WebtoonWidget(webtoon: snapshot.data![index]);
             },
             separatorBuilder: (context, index) {
               return const SizedBox(
-                height: 10,
+                width: 10,
               );
             },
           );

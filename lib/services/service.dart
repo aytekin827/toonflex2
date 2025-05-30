@@ -23,4 +23,13 @@ class ApiService {
     throw Exception('Failed to load data');
   }
 
+  static Future<WebtoonDetailModel> getWebtoonById(String id) async {
+    final url = Uri.parse('$_baseUrl$id');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> webtoons = jsonDecode(response.body);
+      return WebtoonDetailModel.fromJson(webtoons);
+    }
+    throw Exception('Failed to load data');
+  }
 }
